@@ -34,7 +34,7 @@ module.exports={
             const newUser=  db.query("INSERT INTO users (user_name,user_email,user_password) VALUES(?,?,?)",
             [userName,userEmail,bcryptPassword], (err,result)=>{
             if(err)  console.log(err)
-            console.log(result.insertId)
+            console.log(result)
 
             //produce token and return it
             const token =jwtGenerator(result.insertId)
@@ -64,10 +64,10 @@ module.exports={
             //check that user exists by checking that the email exist on db
             const user= db.query('SELECT * from users WHERE user_email=?',
             [userEmail], (err,result)=>{
-            if(result.length===0) res.status(404).send('user does not exist')
+            if(result.length===0) return res.status(404).send('user does not exist')
              
             //check that password is valid
-            console.log(userPassword, result[0].user_password)
+            console.log(result)
             const validPassword=  bcrypt.compare(userPassword,result[0].user_password)
             if(!validPassword) return res.status(404).send('your passport is incorrect')
             

@@ -13,17 +13,27 @@ const replaceWhiteSpace=(str)=>{
 }
  module.exports={
      getId:async(name)=>{
-        const userName= await replaceWhiteSpace(name)
-        const  tUser = await roClient.v2.userByUsername(userName);
-        const twitUserId=await tUser.data.id
-        return twitUserId
-     },
-     getTwitt:async(id)=>{
-         console.log(id)
-        const tweetsOfUser = await roClient.v2.userTimeline(id, { exclude: 'replies' });
-        return tweetsOfUser.data.data[0].text
-     }
+         try {
+            const userName= await replaceWhiteSpace(name)
+            console.log(userName)
+            const  tUser = await roClient.v2.userByUsername(userName);
+            console.log(tUser)
+            const twitUserId=await tUser.data.id
+            return twitUserId
 
+         } catch (error) {
+             console.log('from getId',error)
+         }
+        
+     }, 
+     getTwitt:async(id)=>{
+        
+        const tweetsOfUser = await roClient.v2.userTimeline(id, { exclude: 'replies' });
+        console.log('from connectTwitt',id,tweetsOfUser.data.data)
+        if(tweetsOfUser.data.data!==undefined) return tweetsOfUser.data.data[0].text
+        else return 'could not find twitt'
+        
+     }
      
  }
  

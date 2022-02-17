@@ -7,7 +7,7 @@ const validateInput=require('../middleware/validateInput')
 router.use(validateInput)
 router.get('/test', controller.test)
 router.post('/registeruser',controller.registerUser)
-router.get('/login',controller.login)
+router.post('/signin',controller.login)
 router.get('/isverified',authorization,controller.isVerified)
 
 module.exports=router
