@@ -17,7 +17,19 @@ const s3= new S3({
     
 })
 
+const downloaded=async (imagekey)=>{
 
+    const downloadParams={
+        Key:imagekey,
+        Bucket:bucketName
+    }
+    try {
+        const imageFs=   await s3.getObject(downloadParams)
+        return imageFs.createReadStream()
+    } catch (error) {
+        console.log(error)
+    }
+}
 //1 getImage obtains the image by web scrapping the wikipedia page.
 
 const getImage= async (name)=>{
@@ -57,30 +69,15 @@ module.exports={
      return s3.upload(uploadParams).promise()
      
      },
-     download:async(imageKey)=>{
-        
-        const downloadParams={
-            Key:imageKey,
-            Bucket:bucketName
-        }
-         try {
-        const downloadFromS3=async()=>{
-
-          return  await s3.getObject(downloadParams, (err,data)=>{
-                if(err) console.log(err)
-                else console.log(data)
-            })
-        }
-         
-        
-        var image=await downloadFromS3()
-        console.log(image)
-         }
-          catch (error) {
-             console.log('this is the error',error)
-         }
-        
-      
+     
+     streamToString:async(key)=>{
+        const stream= await downloaded(key)
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+        stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+        stream.on('error', (err) => reject(err));
+        stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    })
      }
 }
 

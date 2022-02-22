@@ -3,6 +3,7 @@ const connectWiki=require('../services/connectWiki')
 const connectTwitt=require('../services/connectTwitt')
 const wikiImage=require('../services/wikiImage')
 
+
 module.exports={
     
     
@@ -46,7 +47,7 @@ module.exports={
                 container['name']=obj.profile_name
                 container['desc']=obj.profile_desc
                 container['twitter']= await connectTwitt.getTwitt(obj.twitt)
-                container['image']=await wikiImage.download(req.params.key)
+                container['image']=await wikiImage.streamToString(obj.profile_name)
                 return  container
             }))
             console.log(profiles)
@@ -96,11 +97,10 @@ module.exports={
         res.send(response)
     },
     downloadImage:async(req,res)=>{
-        const response=await wikiImage.download(req.params.key)
-        //console.log(res)
+        const response=await wikiImage.streamToString(req.params.key)
+        console.log(response)
+        //res.send(response)
         //response.pipe(res)
-        //if(response===undefined) console.log('response is', response)
         
-        //response.createReadStream().pipe(res)
     }
 }
