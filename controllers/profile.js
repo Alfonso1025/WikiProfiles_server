@@ -1,7 +1,10 @@
 const db=require('../services/db')
+const imageDownloader=require('node-image-downloader')
 const connectWiki=require('../services/connectWiki')
 const connectTwitt=require('../services/connectTwitt')
 const wikiImage=require('../services/wikiImage')
+const scrappImage=require('../services/wikiLogo')
+
 
 
 module.exports={
@@ -97,10 +100,29 @@ module.exports={
         res.send(response)
     },
     downloadImage:async(req,res)=>{
+        
         const response=await wikiImage.streamToString(req.params.key)
         console.log(response)
-        //res.send(response)
         //response.pipe(res)
-        
+
+        /* const [logo]=await scrappImage()
+        imageDownloader({
+            imgs:[
+                {
+                    uri:'https://www.wikipedia.org/'+ logo
+                }
+            ],
+                
+            dest:'../../wikiProfiles/Client/react-client/src/styles'
+                
+            
+        }).then(info=>{
+            console.log('completed', info)
+
+        }).catch((error, response, body) => {
+            console.log('something goes bad!')
+            console.log(error)
+          })
+ */
     }
 }

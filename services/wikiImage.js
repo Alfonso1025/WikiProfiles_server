@@ -36,7 +36,7 @@ const getImage= async (name)=>{
 
     const list=[]
     const url=`http://en.wikipedia.org/wiki/${name}`
-    const test='test'
+    
      
    const response= await axios.get(url).then(res=>{
 
@@ -73,6 +73,7 @@ module.exports={
      streamToString:async(key)=>{
         const stream= await downloaded(key)
         const chunks = [];
+        
         return new Promise((resolve, reject) => {
         stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
         stream.on('error', (err) => reject(err));
