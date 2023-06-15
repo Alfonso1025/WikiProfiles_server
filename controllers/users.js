@@ -1,4 +1,4 @@
-const db=require('../services/db')
+const db= require('../services/db')
 const bcrypt = require('bcrypt')
 const jwtGenerator=require('../services/jwtGenerator')
 const Resolver=require('../services/resolver')
@@ -19,7 +19,7 @@ module.exports={
            const {userName, userEmail, userPassword}=req.body
 
         //Check if user alreday exist on db by email
-        const user=db.query("SELECT * FROM users WHERE user_email=?",
+        const user=db.query("SELECT * FROM Users WHERE user_email=?",
         [userEmail], async(err,result)=>{
 
             if(err) console.log(err)
@@ -31,7 +31,7 @@ module.exports={
             const bcryptPassword= await bcrypt.hash(userPassword, salt)
 
             //insert new user to db   
-            const newUser=  db.query("INSERT INTO users (user_name,user_email,user_password) VALUES(?,?,?)",
+            const newUser=  db.query("INSERT INTO Users (user_name,user_email,user_password) VALUES(?,?,?)",
             [userName,userEmail,bcryptPassword], (err,result)=>{
             if(err)  console.log(err)
             console.log(result)
@@ -62,7 +62,7 @@ module.exports={
             const {userEmail,userPassword}=req.body
 
             //check that user exists by checking that the email exist on db
-            const user= db.query('SELECT * from users WHERE user_email=?',
+            const user= db.query('SELECT * from Users WHERE user_email=?',
             [userEmail], (err,result)=>{
             if(result.length===0) return res.status(404).send('user does not exist')
              

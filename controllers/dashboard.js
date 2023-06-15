@@ -10,14 +10,17 @@ module.exports={
    const userId= req.user
 
      //get the user that matches with the id
-    const user=db.query('SELECT * FROM users WHERE user_id=?',
+    const user=db.query('SELECT * FROM Users WHERE user_id=?',
     [userId],(err, result)=>{
-    if(err) return res.status(404).send(' user could not be found')
-    resolver.success(result, 'user found')
+    if(err) return resolver.internalServerError(err, err.message)
+    console.log('result', result)
+    return resolver.success(result, 'user found')
     })
         } 
     catch (error) {
             console.log(error)
+            return resolver.internalServerError(error, error.message)
+
         }
     }
 }

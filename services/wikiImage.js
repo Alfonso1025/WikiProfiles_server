@@ -24,10 +24,13 @@ const downloaded=async (imagekey)=>{
         Bucket:bucketName
     }
     try {
+        console.log('we are hitting the downloaded function')
+        console.log('retrieving image for: ', imagekey)
         const imageFs=   await s3.getObject(downloadParams)
+
         return imageFs.createReadStream()
     } catch (error) {
-        console.log(error)
+        console.log('this is the error',error)
     }
 }
 //1 getImage obtains the image by web scrapping the wikipedia page.
@@ -66,7 +69,8 @@ module.exports={
             Body:imgUrl,
             Key:identifier
         }
-     return s3.upload(uploadParams).promise()
+    const result = await s3.upload(uploadParams).promise()
+    console.log('result of uploading an image', result)
      
      },
      

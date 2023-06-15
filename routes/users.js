@@ -1,6 +1,7 @@
 const {Router}=require('express')
 const router=Router()
 const controller= require('../controllers/users')
+
 const authorization = require('../middleware/authorization')
 const validateInput=require('../middleware/validateInput')
 

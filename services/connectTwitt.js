@@ -23,13 +23,14 @@ const replaceWhiteSpace=(str)=>{
 
          } catch (error) {
              console.log('from getId',error)
+            
          }
         
      }, 
      getTwitt:async(id)=>{
-        
+        if(id===null) return 'could not find twitt'
         const tweetsOfUser = await roClient.v2.userTimeline(id, { exclude: 'replies' });
-        console.log('from connectTwitt',id,tweetsOfUser.data.data)
+        //console.log('from connectTwitt',id,tweetsOfUser.data.data)
         if(tweetsOfUser.data.data!==undefined) return tweetsOfUser.data.data[0].text
         else return 'could not find twitt'
         

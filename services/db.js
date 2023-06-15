@@ -1,9 +1,9 @@
-const mysql      = require('mysql2');
+ const mysql      = require('mysql2');
 const db = mysql.createConnection({
-  host     : 'alfonsodatabase.cfd2eq2xlttv.us-east-2.rds.amazonaws.com',
-  user     : 'Alfonsoadmin',
-  password : 'piloto25Aviador',
-  database : 'profiles_users'
+  host     : 'profilesusers.ce9vmqdoehtk.us-east-1.rds.amazonaws.com',
+  user     : 'admin',
+  password : 'pilotoAviador',
+  database : 'profilesusers'
 });
 
-module.exports=db
+module.exports=db  

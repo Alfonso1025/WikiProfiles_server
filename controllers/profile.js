@@ -19,12 +19,12 @@ module.exports={
             //call the connect to wikipedia function and pass it
             //the name to be searched
             const wikipedia= await connectWiki(req.params.name)
-            //console.log(wikipedia)
-            //call the connect with Twitter function
+          
+            //call the connectwithTwitt function
             const tUserId=await connectTwitt.getId(req.params.name)
 
              //post data to database
-             const profile=db.query('INSERT INTO profiles (user_id,profile_name, profile_desc,twitt) VALUES (?,?,?,?)',
+             const profile=db.query('INSERT INTO Profiles (user_id,profile_name, profile_desc,twitt) VALUES (?,?,?,?)',
             [userId,req.params.name,wikipedia,tUserId], (err,result)=>{
                 if(err) res.status(404).send(err)
                 res.send(result)
@@ -41,16 +41,17 @@ module.exports={
     getProfile: (req,res)=>{
         try {
            const userId=req.user
-           const profile=db.query('SELECT * FROM profiles WHERE user_id=?',
+           const profile=db.query('SELECT * FROM Profiles WHERE user_id=?',
         [userId], async (err,result)=>{
             if(err) return res.status(404).send(err)
 
             const profiles= await Promise.all(result.map( async obj=>{
                 const container={}
+                container['id']=obj.profile_id
                 container['name']=obj.profile_name
                 container['desc']=obj.profile_desc
                 container['twitter']= await connectTwitt.getTwitt(obj.twitt)
-                container['image']=await wikiImage.streamToString(obj.profile_name)
+                container['image']= await wikiImage.streamToString(obj.profile_name)
                 return  container
             }))
             console.log(profiles)
@@ -66,7 +67,8 @@ module.exports={
     deleteProfile:(req,res)=>{
     try {
         const profileId=req.params.id
-        const profile=db.query('DELETE  FROM profiles WHERE profile_id=?',
+        console.log(profileId)
+        const profile=db.query('DELETE  FROM Profiles WHERE profile_id=?',
         [profileId],(err,result)=>{
             if(err) return res.status(404).send(err)
             res.send(result)
