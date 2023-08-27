@@ -19,7 +19,10 @@ const options={
 }
 app.use(cors(options)) 
 app.use(express.json())
-
-app.use('/profiles',require('../Server/routes/profile'))
-app.use('/users',require('../Server/routes/users'))
-app.use('/dashboard',require('../Server/routes/dashboard'))
+app.get('/',(req, res)=>{
+    console.log('hello world')
+    res.send('hello worls')
+})
+app.use('/profiles',require('./routes/profile'))
+app.use('/users',require('./routes/users'))
+app.use('/dashboard',require('./routes/dashboard'))

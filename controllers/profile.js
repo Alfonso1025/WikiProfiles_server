@@ -22,6 +22,7 @@ module.exports={
           
             //call the connectwithTwitt function
             const tUserId=await connectTwitt.getId(req.params.name)
+            console.log('this is the twitt id', tUserId)
 
              //post data to database
              const profile=db.query('INSERT INTO Profiles (user_id,profile_name, profile_desc,twitt) VALUES (?,?,?,?)',

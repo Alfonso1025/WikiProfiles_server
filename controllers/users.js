@@ -22,8 +22,8 @@ module.exports={
         const user=db.query("SELECT * FROM Users WHERE user_email=?",
         [userEmail], async(err,result)=>{
 
-            if(err) console.log(err)
-            else if(result.length!=0) res.status(404).send('email already exist')
+            if(err) return resolver.internalServerError(err, 'mysql_error')
+            else if(result.length!=0) resolver.conflict(null, 'email_already_exist')
 
             //Encrypt password with bcrypt
             const saltRound =10
@@ -64,12 +64,12 @@ module.exports={
             //check that user exists by checking that the email exist on db
             const user= db.query('SELECT * from Users WHERE user_email=?',
             [userEmail], (err,result)=>{
-            if(result.length===0) return res.status(404).send('user does not exist')
+            if(result.length===0) return resolver.notFound(err, err.message)
              
             //check that password is valid
             console.log(result)
             const validPassword=  bcrypt.compare(userPassword,result[0].user_password)
-            if(!validPassword) return res.status(404).send('your passport is incorrect')
+            if(!validPassword) return resolver.unauthorized(null, 'invalid_password')
             
             //produce token
             
@@ -83,11 +83,13 @@ module.exports={
             }
     },
     isVerified:(req,res)=>{
+        const resolver = Resolver(res)
         try {
-            res.json(true)
+            resolver.success(true, 'valid_token')
         } catch (error) {
-            console.log(error)
-            res.status(500).send('server error')
+            console.log('from catch block',error)
+            resolver.unauthorized(error, error.message)
+            
         }
     }
 }
